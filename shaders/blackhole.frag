@@ -17,18 +17,18 @@ uniform sampler2D uSkybox;
 uniform sampler2D uDiskTex;
 const float PI = 3.141592653589793;
 
-const int   MAX_STEPS  = 300;
-const int   KERR_STEPS = 300;
-const float STEP_SCALE = 0.05;
-const float STEP_MIN   = 0.02;
+const int   MAX_STEPS  = 400;
+const int   KERR_STEPS = 500;
+const float STEP_SCALE = 0.04;
+const float STEP_MIN   = 0.005;
 const float STEP_MAX   = 2.0;
 const float HORIZON_R  = 1.001;
 const float ESCAPE_R   = 40.0;
 
 const float M            = 0.5;
-const float DISK_INNER   = 3.0;
+const float DISK_INNER   = 1.50;
 const float DISK_OUTER   = 12.0;
-const float T_INNER      = 5000.0;
+const float T_INNER      = 4000.0;
 
 const float SWIRL_SPEED  = 1.0;
 const float SWIRL_LOOP   = 12.0;
@@ -92,7 +92,8 @@ vec3 diskEmission(vec3 hit, vec3 rayVel, float rc) {
     float temp = T_INNER * pow(DISK_INNER / rc, 0.75);
     float tObs = g * temp;
 
-    return blackbodyRGB(tObs) * brightness;
+    vec3 emission = blackbodyRGB(tObs) * brightness;
+    return min(emission, vec3(8.0));
 }
 
 float diskDensity(vec3 hit, float rc) {
@@ -127,7 +128,9 @@ vec3 trace(vec3 pos, vec3 dir) {
         if (r < HORIZON_R) return color;
         if (r > ESCAPE_R)  return color + transmittance * sampleSkybox(normalize(vel));
 
-        float h = clamp(STEP_SCALE * r, STEP_MIN, STEP_MAX);
+        float photonProx = exp(-3.0 * abs(r - 1.5) / 1.5);
+        float localScale = mix(STEP_SCALE, STEP_SCALE * 0.25, photonProx);
+        float h = clamp(localScale * r, STEP_MIN, STEP_MAX);
         vec3 prevPos = pos;
         rk4Step(pos, vel, L2, h);
 
@@ -220,17 +223,22 @@ vec3 traceKerr(vec3 camPos, vec3 dir) {
     float rH = kerrHorizon(a) * 1.001;
     vec3  color = vec3(0.0);
     float transmittance = 1.0;
+    float photonApprox = M * (1.0 + cos(0.6667 * acos(clamp(-a / M, -1.0, 1.0))));
 
     for (int i = 0; i < KERR_STEPS; ++i) {
         float R = length(X);
-        if (kerrRadius(X, a) < rH) return color;
+        float rK = kerrRadius(X, a);
+        if (rK < rH) return color;
 
         vec3 k1X, k1P;
         kerrDeriv(X, p, E, a, k1X, k1P);
 
         if (R > ESCAPE_R)
             return color + transmittance * sampleSkybox(normalize(k1X));
-        float h = clamp(STEP_SCALE * R, STEP_MIN, STEP_MAX);
+
+        float proxK = exp(-3.0 * abs(rK - photonApprox) / max(photonApprox, 0.3));
+        float localScaleK = mix(STEP_SCALE, STEP_SCALE * 0.25, proxK);
+        float h = clamp(localScaleK * R, STEP_MIN, STEP_MAX);
         vec3 prevX = X;
 
         vec3 k2X, k2P, k3X, k3P, k4X, k4P;
