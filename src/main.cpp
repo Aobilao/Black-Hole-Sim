@@ -127,11 +127,8 @@ int main() {
         const GLuint skybox = loadTexture(std::string(ASSET_DIR) + "/starfield.jpg");
         const GLuint disk   = loadTexture(std::string(ASSET_DIR) + "/disk.png");
 
-        // Performance: trace the (expensive) black-hole pass at a fraction of
-        // the window resolution and let post.frag upscale it (linear filter).
-        // The 'G' key cycles through these scales at runtime.
         const float kRenderScales[] = { 1.0f, 0.75f, 0.5f, 0.4f };
-        int   renderScaleIdx = 1;            // start at 0.75x
+        int   renderScaleIdx = 1;
 
         int fbWidth  = std::max(1, static_cast<int>(g_width  * kRenderScales[renderScaleIdx]));
         int fbHeight = std::max(1, static_cast<int>(g_height * kRenderScales[renderScaleIdx]));
@@ -160,8 +157,8 @@ int main() {
             glBindVertexArray(vao);
 
             bool  showDisk = true;
-            int   metric   = 0;       // 0 = Schwarzschild, 1 = Kerr
-            float spin     = 0.25f;   // Kerr spin a, clamped below M = 0.5
+            int   metric   = 0;
+            float spin     = 0.25f;
             int prevReloadKey = GLFW_RELEASE;
             int prevDiskKey   = GLFW_RELEASE;
             int prevMetricKey = GLFW_RELEASE;
@@ -204,7 +201,6 @@ int main() {
                 }
                 prevScaleKey = scaleKey;
 
-                // Adjust Kerr spin while held: '[' slower, ']' faster.
                 if (glfwGetKey(window, GLFW_KEY_LEFT_BRACKET)  == GLFW_PRESS) spin -= 0.005f;
                 if (glfwGetKey(window, GLFW_KEY_RIGHT_BRACKET) == GLFW_PRESS) spin += 0.005f;
                 spin = glm::clamp(spin, 0.0f, 0.49f);
