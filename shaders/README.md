@@ -25,7 +25,7 @@ The core physics shader – traces one light ray per pixel through Schwarzschild
 
 **Accretion disk**
 - Detected by a sign change in `pos.y` (ray crosses the equatorial plane y = 0) between consecutive integration steps. The crossing point is linearly interpolated.
-- Only sampled if the crossing radius falls within `[DISK_INNER, DISK_OUTER]` = `[3, 9]` Schwarzschild radii.
+- Only sampled if the crossing radius falls within `[DISK_INNER, DISK_OUTER]` = `[3, 12]` Schwarzschild radii.
 - **`diskDensity()`** – looks up the procedural noise texture using an azimuthal coordinate that rotates at the local Keplerian angular velocity (`ω = √(M/r³)`), producing a swirling pattern. Because `ω ∝ r^−3/2`, unbounded advection shears the texture into ever-finer spirals that eventually wind below pixel size and average to a featureless disk. To avoid this the advection runs on a looping global sawtooth (period `SWIRL_LOOP`) with two half-offset copies cross-faded: the instantaneous rate is still exactly `ω` (the motion is unchanged) but the winding is capped at `ω·SWIRL_LOOP` turns, so detail persists indefinitely while the loop reset stays hidden.
 - **`diskEmission()`** – computes physically-motivated colour:
   - Gravitational redshift: `g_grav = √(1 − 1/r)`.
