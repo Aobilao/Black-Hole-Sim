@@ -1,0 +1,13 @@
+build/
+.venv
+
+.vs/
+.vscode/
+*.user
+
+*.exe
+*.pdb
+*.ilk
+*.obj
+*.lib
+*.dll
