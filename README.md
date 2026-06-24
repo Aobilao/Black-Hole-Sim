@@ -1,6 +1,6 @@
-# Schwarzschild Black Hole
+# Black Hole Simulation
 
-Real-time Schwarzschild black hole visualisation using GPU ray marching. Light rays are traced along geodesics of the Schwarzschild metric via a 4th-order Runge–Kutta integrator, producing gravitational lensing of a background starfield and an orbiting accretion disk with relativistic Doppler shifting and blackbody colouring.
+Real-time black hole visualisation using GPU ray marching. Light rays are traced along geodesics of the Schwarzschild and Kerr metric via a 4th-order Runge–Kutta integrator, producing gravitational lensing of a background starfield and an orbiting accretion disk with relativistic Doppler shifting and blackbody colouring.
 
 ## Features
 
