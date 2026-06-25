@@ -57,8 +57,6 @@ This overwrites `assets/disk.png` with a fresh procedural noise texture used for
 | `R` | Hot-reload shaders |
 | `Esc` | Quit |
 
-In Kerr mode the black hole rotates about the vertical axis: frame dragging twists the lensed starfield and skews the photon ring asymmetrically. Spin `a` ranges `0 → 0.49` (with `M = 0.5`); `a = 0` is identical to Schwarzschild.
-
 ## Project Structure
 
 ```

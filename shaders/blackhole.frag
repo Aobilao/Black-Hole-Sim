@@ -26,7 +26,7 @@ const float HORIZON_R  = 1.001;
 const float ESCAPE_R   = 40.0;
 
 const float M            = 0.5;
-const float DISK_INNER   = 1.50;
+const float DISK_INNER   = 1.808;
 const float DISK_OUTER   = 12.0;
 const float T_INNER      = 4000.0;
 
@@ -215,7 +215,7 @@ void kerrInit(vec3 camPos, vec3 dir, float a, out vec3 p, out float E) {
 }
 
 vec3 traceKerr(vec3 camPos, vec3 dir) {
-    float a = uSpin;
+    float a = -uSpin;
     vec3  p; float E;
     kerrInit(camPos, dir, a, p, E);
 

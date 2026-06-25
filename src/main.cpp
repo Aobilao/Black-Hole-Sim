@@ -99,7 +99,7 @@ int main() {
     glfwGetFramebufferSize(window, &g_width, &g_height);
 
     std::printf("OpenGL %s\n", glGetString(GL_VERSION));
-    std::printf("GPU:    %s\n", glGetString(GL_RENDERER));
+    std::printf("GPU:   %s\n", glGetString(GL_RENDERER));
 
     glfwSwapInterval(1);
 
@@ -128,7 +128,7 @@ int main() {
         const GLuint disk   = loadTexture(std::string(ASSET_DIR) + "/disk.png");
 
         const float kRenderScales[] = { 1.0f, 0.75f, 0.5f, 0.4f };
-        int   renderScaleIdx = 1;
+        int   renderScaleIdx = 0;
 
         int fbWidth  = std::max(1, static_cast<int>(g_width  * kRenderScales[renderScaleIdx]));
         int fbHeight = std::max(1, static_cast<int>(g_height * kRenderScales[renderScaleIdx]));
